@@ -6,6 +6,7 @@
 class Card {
 	
 public:
+	Card();
 	Card(int rank, Suit suit, int x, int y);
 
 	int getRank();
@@ -16,6 +17,8 @@ public:
 
 	void setX(int x);
 	void setY(int y);
+
+	bool getOrientation();
 
 	void draw(sf::RenderWindow & window, sf::Texture & deckSpriteSheet);
 
@@ -30,4 +33,6 @@ private:
 
 	int x;
 	int y;
+
+	bool orientation;
 };

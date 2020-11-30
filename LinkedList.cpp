@@ -54,6 +54,15 @@ void LinkedList::forEach(NodeHandler handler, sf::RenderWindow & window, sf::Tex
 	}
 }
 
+Card LinkedList::operator[] (int position) {
+	Node* cur = head;
+	for (int i = 0; i <= position; i++) {
+		if (i == position) return cur->data;
+		cur = cur->nextNode;
+	}
+	return cur->data;
+}
+
 std::ostream& operator <<(std::ostream& out, const LinkedList& ll) {
 	out << ll.length;
 	return out;

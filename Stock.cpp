@@ -9,6 +9,7 @@ void Stock::fill() {
 	for (int i = 0; i < 52; i++) {
 		cards.push_back(Card((i % 13) + 1, (Suit)(i % 4), x, y));
 	}
+	std::cout << "STOCK X: " << x << "\n";
 }
 
 void Stock::shuffle() {
@@ -30,6 +31,16 @@ void Stock::printCards() {
 
 Card Stock::getTopCard() {
 	return cards[cards.size()-1];
+}
+
+sf::Vector2i Stock::getXBounds() {
+	sf::Vector2i xBounds(x, x+117);
+	return xBounds;
+}
+
+sf::Vector2i Stock::getYBounds() {
+	sf::Vector2i yBounds(y, y+154);
+	return yBounds;
 }
 
 void Stock::draw(sf::RenderWindow& window) {

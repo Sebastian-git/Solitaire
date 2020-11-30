@@ -1,5 +1,7 @@
 #include "Card.h"
 
+Card::Card() {};
+
 Card::Card(int rank, Suit suit, int x, int y) : rank(rank), suit(suit), x(x), y(y) {}
 
 int Card::getRank() {
@@ -24,6 +26,10 @@ void Card::setX(int x) {
 
 void Card::setY(int y) {
 	this->y = y;
+}
+
+bool Card::getOrientation() {
+	return orientation;
 }
 
 void Card::draw(sf::RenderWindow & window, sf::Texture & deckSpriteSheet) {

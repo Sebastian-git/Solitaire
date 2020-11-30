@@ -28,8 +28,16 @@ void Game::run() {
 
 		// Set window background to green
 		window.clear(sf::Color::Green);
+
+		// Take mouse position, print position if it's in the x/y bounds of waste
+		if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
+			sf::Vector2i pos = sf::Mouse::getPosition(window);
+			if (logic.validMousePosition(pos) && logic.validCardPlacement(pos)) { // If validMousePosition and validCardPlacement, then place card on new x/y
+				std::cout << pos.x << ":" << pos.y << "\n";
+			}
+		}
 		
-		// Draws cards to screen
+		// Draws cards to screen, calls logic class to handle card logic behind the scenes
 		logic.draw(window);
 
 		// Updates window display

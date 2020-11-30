@@ -12,12 +12,18 @@ public:
 
 	void fill();
 	void shuffle();
+
 	void printCards();
 	Card getTopCard();
+
+	sf::Vector2i getXBounds();
+	sf::Vector2i getYBounds();
+	
 	void draw(sf::RenderWindow& window);
 
 private:
 	std::vector<Card> cards;
 	sf::Texture & deckSpriteSheet;
 	int x, y;
+	int xBounds, yBounds;
 };
