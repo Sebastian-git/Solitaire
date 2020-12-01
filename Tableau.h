@@ -11,8 +11,17 @@ public:
 	
 	void fillCascades(Stock & stock);
 	
-	std::vector<Cascade> getCascades();
 	std::vector<Card> getTopCards();
+
+	bool cascadeIsEmpty(sf::Vector2i pos);
+
+	bool containsPos(sf::Vector2i pos);
+	bool containsTopCard(Card card);
+
+	Card getCardAt(sf::Vector2i pos);
+	void removeCardAt(sf::Vector2i pos);
+
+	void addCardAt(sf::Vector2i pos, Card & card);
 
 	void printCascades();	
 	void draw(sf::RenderWindow& window);
@@ -20,5 +29,7 @@ public:
 private:
 	sf::Texture & deckSpriteSheet;
 	std::vector<Cascade> cascades;
+
 	int x, y;
+	int width, height;
 };

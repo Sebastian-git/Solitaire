@@ -10,15 +10,18 @@ public:
 
 	void drawCards(Stock & stock); // Draws 3 cards from Stock
 
-	Card getCards(int index);
-
 	sf::Vector2i getXBounds();
 	sf::Vector2i getYBounds();
+
+	bool containsPos(sf::Vector2i pos);
+	Card getCardAt(sf::Vector2i pos);
+	void removeCardAt(sf::Vector2i pos);
 	
 	void draw(sf::RenderWindow & window); // Draws waste to window
 
 private:
-	LinkedList cards;
+	std::vector<Card> cards;
 	sf::Texture & deckSpriteSheet;
 	int x, y;
+	int drawCount;
 };

@@ -1,6 +1,8 @@
 #pragma once
+#include <vector>
 #include "LinkedList.h"
 #include "Stock.h"
+#include "Card.h"
 
 class Cascade {
 
@@ -8,11 +10,23 @@ public:
 	Cascade(sf::Texture & deckSpriteSheet, int x, int y);
 	void startCards(Stock& stock, int total);
 
-	LinkedList getCascade();
+	bool containsPos(sf::Vector2i pos);
+	Card getCardAt(sf::Vector2i pos);
+
+	void addCard(Card card);
+	void removeCardAt(sf::Vector2i pos);
+
+	std::vector<Card> getCascade();
+	int getLargestCascade();
 	void draw(sf::RenderWindow & window);
 
+	int size();
+
 private:
-	LinkedList cascade;
+	std::vector<Card> cascade;
+
 	sf::Texture& deckSpriteSheet;
+
 	int x, y;
+	int width, height;
 };

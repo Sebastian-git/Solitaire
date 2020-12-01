@@ -2,14 +2,13 @@
 #include <cstdlib>
 #include <iostream>
 
-Stock::Stock(sf::Texture & deckSpriteSheet, int x, int y) : deckSpriteSheet(deckSpriteSheet), x(x), y(y) { }
+Stock::Stock(sf::Texture & deckSpriteSheet, int x, int y) : deckSpriteSheet(deckSpriteSheet), x(x), y(y) {}
 
 void Stock::fill() {
 	cards.clear();
 	for (int i = 0; i < 52; i++) {
-		cards.push_back(Card((i % 13) + 1, (Suit)(i % 4), x, y));
+		cards.push_back(Card((i % 13) + 1, (Suit)(i % 4), x, y, 0));
 	}
-	std::cout << "STOCK X: " << x << "\n";
 }
 
 void Stock::shuffle() {
@@ -44,5 +43,8 @@ sf::Vector2i Stock::getYBounds() {
 }
 
 void Stock::draw(sf::RenderWindow& window) {
-	cards.back().draw(window, deckSpriteSheet);
+	if (cards.size() > 0) {
+		cards.back().setOrientation(1);
+		cards.back().draw(window, deckSpriteSheet);
+	}
 }
