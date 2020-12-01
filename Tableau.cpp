@@ -1,24 +1,74 @@
 #include "Tableau.h"
 
-Tableau::Tableau(sf::Texture & deckSpriteSheet, int x, int y) : deckSpriteSheet(deckSpriteSheet), x(x), y(y) {};
+Tableau::Tableau(sf::Texture& deckSpriteSheet, int x, int y) : deckSpriteSheet(deckSpriteSheet), x(x), y(y),
+width(1240), height(700) {
+};
 
 void Tableau::fillCascades(Stock& stock) {
 	for (int i = 1; i <= 7; i++) {
-		cascades.push_back(Cascade(deckSpriteSheet, x+(80 + (i-1) * (4.9*35) ), y+300));
-		cascades[i - 1].startCards(stock, i);
+		cascades.push_back(Cascade(deckSpriteSheet, (int)(80 + (i - 1) * x), y));
+		cascades[(i - 1)].startCards(stock, i);
 	}
-}
-
-std::vector<Cascade> Tableau::getCascades() {
-	return cascades;
 }
 
 std::vector<Card> Tableau::getTopCards() {
 	std::vector<Card> topCards;
 	for (int i = 0; i < cascades.size(); i++) {
-		topCards.push_back(cascades[i].getCascade().top());
+		if (cascades[i].size() > 0) {
+			topCards.push_back(cascades[i].getCascade().back());
+		}
 	}
 	return topCards;
+}
+
+bool Tableau::cascadeIsEmpty(sf::Vector2i pos) {
+	for (int i = 0; i < cascades.size(); i++) {
+		if (cascades[i].containsPos(pos) && cascades[i].size() == 0) return true;
+	}
+	return false;
+}
+
+bool Tableau::containsPos(sf::Vector2i pos) {
+	if (pos.x > 80 && pos.x < width && pos.y > y && pos.y < height) {
+		for (int i = 0; i < cascades.size(); i++) {
+			if (cascades[i].containsPos(pos)) return true;
+		}
+	}
+	return false;
+}
+
+bool Tableau::containsTopCard(Card card) {
+	std::vector<Card> topCards = getTopCards();
+	for (int i = 0; i < topCards.size(); i++) {
+		if (topCards[i] == card) return true;
+	}
+	return false;
+}
+
+Card Tableau::getCardAt(sf::Vector2i pos) {
+	for (int i = 0; i < cascades.size(); i++) {
+		if (cascades[i].containsPos(pos) && cascades[i].size() > 0) {
+			return cascades[i].getCardAt(pos);
+		}
+	}
+	return Card();
+}
+
+void Tableau::addCardAt(sf::Vector2i pos, Card & card) {
+	std::cout << "CALLED\n";
+	for (int i = 0; i < cascades.size(); i++) {
+		if (cascades[i].containsPos(pos)) {
+			cascades[i].addCard(card);
+		}
+	}
+}
+
+void Tableau::removeCardAt(sf::Vector2i pos) {
+	for (int i = 0; i < cascades.size(); i++) {
+		if (cascades[i].containsPos(pos)) {
+			cascades[i].removeCardAt(pos);
+		}
+	}
 }
 
 void Tableau::printCascades() {

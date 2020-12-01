@@ -3,9 +3,9 @@
 
 Logic::Logic(sf::Texture & deckSpriteSheet) : 
 	deckSpriteSheet(deckSpriteSheet), 
-	stock(deckSpriteSheet, 10, 630),
-	waste(deckSpriteSheet, 620, 630), 
-	tableau(deckSpriteSheet, 10, 10) {}
+	stock(deckSpriteSheet, 10, 700),
+	waste(deckSpriteSheet, 1100, 700), 
+	tableau(deckSpriteSheet, 180, 280) {}
 
 // Calls all functions to start game
 void Logic::startGame() {
@@ -32,52 +32,80 @@ void Logic::draw(sf::RenderWindow & window) {
 }
 
 // Saves card to place somewhere else
-void Logic::saveCard(Card card) {
-	std::cout << "Saved" << card << "\n";
-	savedCard = card;
+void Logic::saveCard(Card card, sf::Vector2i pos) {
+	if (card.getRank() > 0 && cardSelected == false) {
+		std::cout << "Saved" << card << "\n";
+		savedPos = pos;
+		savedCard = card;
+		cardSelected = true;
+	}
+}
+
+void Logic::unsaveCard() {
+	savedPos = sf::Vector2i(0, 0);
+	savedCard = Card();
+	cardSelected = false;
+	std::cout << "Unsaved card card.\n";
 }
 
 // Take mouse position, return true if the x/y bounds are valid in the following ways:
 // Must be inside either stock, waste, tableau or foundation
 bool Logic::validMousePosition(sf::Vector2i pos) {
-	// use waste.getXBounds()
-	if (inWaste(pos) || inStock(pos)) {
-		// Detect which card is being hovered over
-
-		return true; // add inStock(), inTableau() etc
+	if (inStock(pos)) {
+		return true;
 	}
+	// If there is no card selected
+	if (!cardSelected) { 
+		 if (waste.containsPos(pos) && waste.getCardAt(pos).getOrientation() == 1) {
+			saveCard(waste.getCardAt(pos), pos);
+			saveCardClass = 1;
+			return true;
+		} else if (tableau.containsPos(pos) && tableau.getCardAt(pos).getOrientation() == 1) {
+			saveCard(tableau.getCardAt(pos), pos);
+			saveCardClass = 2;
+			return true;
+		}
+	}
+	// If a card is selected, check if you are allowed to place it on this new position
+	else if (cardSelected && (inStock(pos) || waste.containsPos(pos) || tableau.containsPos(pos))) { 
+		if (tableau.cascadeIsEmpty(pos) || (tableau.containsPos(pos) && validCardPlacement(tableau.getCardAt(pos)) &&
+			tableau.containsTopCard(tableau.getCardAt(pos)))) {
+
+			tableau.addCardAt(pos, savedCard);
+
+			if (saveCardClass == 1) waste.removeCardAt(savedPos);
+			else if (saveCardClass == 2) tableau.removeCardAt(savedPos);
+			//else if (saveCardClass == 3)  foundation
+		}
+		unsaveCard();
+		return true;
+	}
+	// If you are clicking off screen, unsave card
+	else {
+		unsaveCard();
+	}
+
 	return false;
 }
 
 // Returns true if card placement logic is correct (detect card's suit & rank)
-bool Logic::validCardPlacement(sf::Vector2i pos) {
-	// Code goes here
-	return true; // fix this later
-}
-
-// Returns true if mouse position is inside the waste
-bool Logic::inWaste(sf::Vector2i pos) {
-	if (pos.x > waste.getXBounds().y && pos.x < waste.getXBounds().x
-		&& pos.y > waste.getYBounds().x && pos.y < waste.getYBounds().y) {
-
-		if (pos.x > 620) saveCard(waste.getCards(2));
-		else if (pos.x > 570 && pos.x < 620) saveCard(waste.getCards(1));
-		else saveCard(waste.getCards(0));
-
-		return true;
+bool Logic::validCardPlacement(Card card) {
+	if ((card.getSuit() >= 2 && savedCard.getSuit() < 2 ||
+		card.getSuit() <= 2 && savedCard.getSuit() >= 2) &&
+		card.getRank() - 1 == savedCard.getRank()) {
+			return true;
 	}
-
 	return false;
 }
 
+// Checks if clicking on stock, if you are it draws 3 more waste cards
 bool Logic::inStock(sf::Vector2i pos) {
 	if (pos.x > stock.getXBounds().x && pos.x < stock.getXBounds().y
 		&& pos.y > stock.getYBounds().x && pos.y < stock.getYBounds().y) {
 
-		saveCard(stock.getTopCard());
+		waste.drawCards(stock);
 
 		return true;
 	}
-
 	return false;
 }

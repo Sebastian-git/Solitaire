@@ -6,6 +6,8 @@
 Game::Game() { }
 
 void Game::run() {
+	
+	bool mousePress = false;
 
 	// Generate deck with card images sprite
 	sf::Texture deckSpriteSheet; 
@@ -17,9 +19,26 @@ void Game::run() {
 	logic.startGame();
 
 	// Create window that is passed into each class to .draw() cards
-	sf::RenderWindow window(sf::VideoMode(1400, 800), "Solitaire");
+	sf::RenderWindow window(sf::VideoMode(1500, 900), "Solitaire");
 	sf::Event event;
 
+	while (window.isOpen()) {
+
+		// Close if user clicks any key or mouse button
+		while (window.pollEvent(event)) {
+			if (event.type == sf::Event::Closed) window.close();
+			else if (event.type == sf::Event::MouseButtonPressed) goto EndSplash;
+			else if (event.type == sf::Event::KeyReleased) goto EndSplash;
+		}
+
+		window.clear(sf::Color::Black);
+
+		// Updates window display
+		window.display();
+	}
+
+	EndSplash:
+	
 	// Game loop
 	while (window.isOpen()) {
 
@@ -30,12 +49,13 @@ void Game::run() {
 		window.clear(sf::Color::Green);
 
 		// Take mouse position, print position if it's in the x/y bounds of waste
-		if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
+		if (sf::Mouse::isButtonPressed(sf::Mouse::Left) && !mousePress) {
+			mousePress = true;
 			sf::Vector2i pos = sf::Mouse::getPosition(window);
-			if (logic.validMousePosition(pos) && logic.validCardPlacement(pos)) { // If validMousePosition and validCardPlacement, then place card on new x/y
-				std::cout << pos.x << ":" << pos.y << "\n";
+			if (logic.validMousePosition(pos)) { 
+				//std::cout << pos.x << ":" << pos.y << "\n";
 			}
-		}
+		} else if (!sf::Mouse::isButtonPressed(sf::Mouse::Left)) mousePress = false;
 		
 		// Draws cards to screen, calls logic class to handle card logic behind the scenes
 		logic.draw(window);

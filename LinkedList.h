@@ -29,7 +29,6 @@ public:
 
 	void forEach(NodeHandler handler, sf::RenderWindow & window, sf::Texture & deckSpriteSheet);
 
-
 	Card operator[] (int position);
 	friend std::ostream& operator <<(std::ostream& out, const LinkedList& ll);
 

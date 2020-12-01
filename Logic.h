@@ -15,12 +15,12 @@ public:
 	
 	void draw(sf::RenderWindow & window);
 
-	void saveCard(Card card); // if in valid mouse position, save card value to place
+	void saveCard(Card card, sf::Vector2i pos);
+	void unsaveCard();
 
-	bool validCardPlacement(sf::Vector2i pos);
+	bool validCardPlacement(Card card);
 	bool validMousePosition(sf::Vector2i pos);
 
-	bool inWaste(sf::Vector2i pos); 
 	bool inStock(sf::Vector2i pos);
 
 private:
@@ -31,4 +31,7 @@ private:
 	sf::Texture & deckSpriteSheet;
 
 	Card savedCard;
+	sf::Vector2i savedPos;
+	int saveCardClass; // 0 = default, 1 = waste, 2 = tableau, 3 = foundation
+	bool cardSelected;
 };

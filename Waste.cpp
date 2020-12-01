@@ -1,18 +1,18 @@
 #include "Waste.h"
 
-Waste::Waste(sf::Texture & deckSpriteSheet, int x, int y) : cards(), deckSpriteSheet(deckSpriteSheet), x(x), y(y) { }
+Waste::Waste(sf::Texture & deckSpriteSheet, int x, int y) : deckSpriteSheet(deckSpriteSheet), x(x), y(y), drawCount(0) { }
 
 void Waste::drawCards(Stock & stock) {
-	for (int i = 0; i < 3; i++) {
-		stock.cards.back().setX(x-(i*50));
-		stock.cards.back().setY(y);
-		cards.push(stock.cards.back());
-		stock.cards.pop_back();
+	if (stock.cards.size() >= 3) {
+		for (int i = 0; i < 3; i++) {
+			stock.cards.back().setX(x - drawCount * 40);
+			stock.cards.back().setY(y);
+			stock.cards.back().setOrientation(1);
+			cards.push_back(stock.cards.back());
+			stock.cards.pop_back();
+			drawCount++;
+		}
 	}
-}
-
-Card Waste::getCards(int index) {
-	return cards[index];
 }
 
 sf::Vector2i Waste::getXBounds() {
@@ -25,9 +25,30 @@ sf::Vector2i Waste::getYBounds() {
 	return yBounds;
 }
 
+bool Waste::containsPos(sf::Vector2i pos) {
+	for (int i = 0; i < cards.size(); i++) {
+		if (cards[i].containsPos(pos)) return true;
+	}
+	return false;
+}
+
+Card Waste::getCardAt(sf::Vector2i pos) {
+	for (int i = 0; i < cards.size(); i++) {
+		if (cards[i].containsPos(pos)) return cards[i];
+	}
+	return Card();
+}
+
+void Waste::removeCardAt(sf::Vector2i pos) {
+	for (int i = 0; i < cards.size(); i++) {
+		if (cards[i].containsPos(pos)) {
+			cards.erase(cards.begin()+i);
+		}
+	}
+}
+
 void Waste::draw(sf::RenderWindow & window) {
-	auto drawHandler = [](Card & card, int index, sf::RenderWindow & window, sf::Texture & deckSpriteSheet) {
-		card.draw(window, deckSpriteSheet);
-	};
-	cards.forEach(drawHandler, window, deckSpriteSheet);
+	for (int i = cards.size()-1; i >= 0; i--) {
+		cards[i].draw(window, deckSpriteSheet);
+	}
 }
