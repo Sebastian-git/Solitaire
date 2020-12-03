@@ -25,7 +25,9 @@ Card LinkedList::pop() {
 
 // Return top card
 Card LinkedList::top() {
-	return head->data;
+	if (head)
+		return head->data;
+	else return Card();
 }
 
 // Return size of Stack

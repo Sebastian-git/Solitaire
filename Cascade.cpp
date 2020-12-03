@@ -35,18 +35,15 @@ void Cascade::addCard(Card card) {
 		cascade.push_back(card);
 	}
 	else {
-		std::cout << "CPASS 1\n";
 		card.setX(x);
 		card.setY(y);
 		cascade.push_back(card);
-		std::cout << "CPASS 2\n";
 	}
 }
 
 void Cascade::removeCardAt(sf::Vector2i pos) {
 	for (int i = cascade.size()-1; i >= 0; i--) {
 		if (cascade[i].containsPos(pos)) {
-			std::cout << "Current card: " << cascade[i] << "\n";
 			cascade.erase(cascade.begin() + i);
 			break;
 		}

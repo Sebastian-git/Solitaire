@@ -1,11 +1,13 @@
 #include "Logic.h"
 #include <SFML/Graphics.hpp>
 
-Logic::Logic(sf::Texture & deckSpriteSheet) : 
-	deckSpriteSheet(deckSpriteSheet), 
+Logic::Logic(sf::Texture& deckSpriteSheet) :
+	deckSpriteSheet(deckSpriteSheet),
 	stock(deckSpriteSheet, 10, 700),
-	waste(deckSpriteSheet, 1100, 700), 
-	tableau(deckSpriteSheet, 180, 280) {}
+	waste(deckSpriteSheet, 1100, 700),
+	tableau(deckSpriteSheet, 180, 260),
+	foundation(deckSpriteSheet, 260, 60)
+{}
 
 // Calls all functions to start game
 void Logic::startGame() {
@@ -29,6 +31,7 @@ void Logic::draw(sf::RenderWindow & window) {
 	stock.draw(window);
 	tableau.draw(window);
 	waste.draw(window);
+	foundation.draw(window);
 }
 
 // Saves card to place somewhere else
@@ -51,6 +54,7 @@ void Logic::unsaveCard() {
 // Take mouse position, return true if the x/y bounds are valid in the following ways:
 // Must be inside either stock, waste, tableau or foundation
 bool Logic::validMousePosition(sf::Vector2i pos) {
+
 	if (inStock(pos)) {
 		return true;
 	}
@@ -67,7 +71,9 @@ bool Logic::validMousePosition(sf::Vector2i pos) {
 		}
 	}
 	// If a card is selected, check if you are allowed to place it on this new position
-	else if (cardSelected && (inStock(pos) || waste.containsPos(pos) || tableau.containsPos(pos))) { 
+	else if (cardSelected && (inStock(pos) || waste.containsPos(pos) || tableau.containsPos(pos)) || foundation.containsPos(pos)) { 
+
+		// Tableau card placement logic
 		if (tableau.cascadeIsEmpty(pos) || (tableau.containsPos(pos) && validCardPlacement(tableau.getCardAt(pos)) &&
 			tableau.containsTopCard(tableau.getCardAt(pos)))) {
 
@@ -75,7 +81,15 @@ bool Logic::validMousePosition(sf::Vector2i pos) {
 
 			if (saveCardClass == 1) waste.removeCardAt(savedPos);
 			else if (saveCardClass == 2) tableau.removeCardAt(savedPos);
-			//else if (saveCardClass == 3)  foundation
+		}
+
+		// Foundation card placement logic
+		if ((foundation.containsPos(pos)) && foundation.stackIsEmpty(pos) && savedCard.getRank() == 1 || (foundation.containsPos(pos) && foundation.validNextCard(savedCard, pos))) {
+
+			foundation.addCardAt(pos, savedCard);
+
+			if (saveCardClass == 1) waste.removeCardAt(savedPos);
+			else if (saveCardClass == 2) tableau.removeCardAt(savedPos);
 		}
 		unsaveCard();
 		return true;
@@ -90,10 +104,10 @@ bool Logic::validMousePosition(sf::Vector2i pos) {
 
 // Returns true if card placement logic is correct (detect card's suit & rank)
 bool Logic::validCardPlacement(Card card) {
-	if ((card.getSuit() >= 2 && savedCard.getSuit() < 2 ||
-		card.getSuit() <= 2 && savedCard.getSuit() >= 2) &&
+	if ((card.getSuit() <= 1 && savedCard.getSuit() >= 2 ||
+		card.getSuit() >= 2 && savedCard.getSuit() <= 1) &&
 		card.getRank() - 1 == savedCard.getRank()) {
-			return true;
+		return true;
 	}
 	return false;
 }

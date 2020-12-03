@@ -13,6 +13,10 @@ void Game::run() {
 	sf::Texture deckSpriteSheet; 
 	if (!deckSpriteSheet.loadFromFile("deckImages.png"))
 		std::cout << "Could not load sprite sheet.\n";
+	
+	sf::Texture splashTexture;
+	if (!splashTexture.loadFromFile("splash.png")) 
+		std::cout << "Could not load splash screen.\n";
 
 	// Handles all game logic
 	Logic logic(deckSpriteSheet); 
@@ -22,6 +26,7 @@ void Game::run() {
 	sf::RenderWindow window(sf::VideoMode(1500, 900), "Solitaire");
 	sf::Event event;
 
+	// Splash screen loop
 	while (window.isOpen()) {
 
 		// Close if user clicks any key or mouse button
@@ -31,7 +36,11 @@ void Game::run() {
 			else if (event.type == sf::Event::KeyReleased) goto EndSplash;
 		}
 
-		window.clear(sf::Color::Black);
+		// Creates card image
+		sf::Sprite sprite;
+		sprite.setTexture(splashTexture);
+		sprite.scale(sf::Vector2f(2.34, 1.95));
+		window.draw(sprite);
 
 		// Updates window display
 		window.display();
@@ -46,7 +55,7 @@ void Game::run() {
 		while (window.pollEvent(event)) if (event.type == sf::Event::Closed) window.close();
 
 		// Set window background to green
-		window.clear(sf::Color::Green);
+		window.clear(sf::Color(50,150,50,255));
 
 		// Take mouse position, print position if it's in the x/y bounds of waste
 		if (sf::Mouse::isButtonPressed(sf::Mouse::Left) && !mousePress) {
@@ -56,6 +65,8 @@ void Game::run() {
 				//std::cout << pos.x << ":" << pos.y << "\n";
 			}
 		} else if (!sf::Mouse::isButtonPressed(sf::Mouse::Left)) mousePress = false;
+
+		
 		
 		// Draws cards to screen, calls logic class to handle card logic behind the scenes
 		logic.draw(window);

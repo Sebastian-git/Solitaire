@@ -5,6 +5,7 @@
 #include "Waste.h"
 #include "Tableau.h"
 #include "Card.h"
+#include "Foundation.h"
 
 class Logic {
 
@@ -27,6 +28,7 @@ private:
 	Stock stock;
 	Waste waste;
 	Tableau tableau;
+	Foundation foundation;
 	
 	sf::Texture & deckSpriteSheet;
 

@@ -1,6 +1,6 @@
 #include "Card.h"
 
-const float Card::width = 39, Card::height = 52, Card::scale = 3.f;
+const float Card::width = 39, Card::height = 52, Card::scale = 2.8;
 
 Card::Card() {};
 
@@ -68,13 +68,12 @@ void Card::draw(sf::RenderWindow & window, sf::Texture & deckSpriteSheet) {
 	sprite.scale(sf::Vector2f(scale, scale));
 	sprite.setTextureRect(loc);
 	sprite.setPosition(sf::Vector2f((float)x, (float)y));
-	// Cards that are visible
-	if (orientation == 1) window.draw(sprite);
+
 	// Cards that are flipped upside down
-	else {
-		sprite.setColor(sf::Color::Red);
-		window.draw(sprite);
-	}
+	if (!orientation) sprite.setColor(sf::Color::Red);
+	if (rank == -1) sprite.setColor(sf::Color::Black);
+	window.draw(sprite);
+
 }
 
 std::ostream& operator <<(std::ostream& out, const Card & card) {
