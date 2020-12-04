@@ -18,7 +18,7 @@ public:
 
 	Card getCardAt(sf::Vector2i pos);
 
-	void addCardAt(sf::Vector2i pos, Card& card);
+	void addCardAt(sf::Vector2i pos, std::vector<Card>& cards);
 
 	void printStacks();
 

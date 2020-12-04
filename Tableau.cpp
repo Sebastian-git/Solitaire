@@ -54,11 +54,10 @@ Card Tableau::getCardAt(sf::Vector2i pos) {
 	return Card();
 }
 
-void Tableau::addCardAt(sf::Vector2i pos, Card & card) {
-	std::cout << "CALLED\n";
+void Tableau::addCardAt(sf::Vector2i pos, std::vector<Card> & cards) {
 	for (int i = 0; i < cascades.size(); i++) {
 		if (cascades[i].containsPos(pos)) {
-			cascades[i].addCard(card);
+			cascades[i].addCard(cards);
 		}
 	}
 }
@@ -68,6 +67,17 @@ void Tableau::removeCardAt(sf::Vector2i pos) {
 		if (cascades[i].containsPos(pos)) {
 			cascades[i].removeCardAt(pos);
 		}
+	}
+}
+
+void Tableau::saveCards(sf::Vector2i pos, Card card, std::vector<Card>& savedCards) {
+	for (int i = 0; i < cascades.size(); i++) {
+		if (cascades[i].containsPos(pos)) {
+			cascades[i].saveCards(card, savedCards);
+		}
+	}
+	for (int i = 0; i < savedCards.size(); i++) {
+		std::cout << "Saved " << savedCards[i] << "\n";
 	}
 }
 

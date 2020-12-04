@@ -28,16 +28,18 @@ Card Stack::getCardAt(sf::Vector2i pos) {
 	return Card();
 }
 
-void Stack::addCard(Card card) {
-	if (stack.size() > 0) {
-		card.setX(x);
-		card.setY(y);
-		stack.push(card);
-	}
-	else {
-		card.setX(x);
-		card.setY(y);
-		stack.push(card);
+void Stack::addCard(std::vector<Card> cards) {
+	for (int i = 0; i < cards.size(); i++) {
+		if (stack.size() > 0) {
+			cards[i].setX(x);
+			cards[i].setY(y);
+			stack.push(cards[i]);
+		}
+		else {
+			cards[i].setX(x);
+			cards[i].setY(y);
+			stack.push(cards[i]);
+		}
 	}
 }
 

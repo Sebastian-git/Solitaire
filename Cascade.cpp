@@ -28,27 +28,37 @@ Card Cascade::getCardAt(sf::Vector2i pos) {
 	return Card();
 }
 
-void Cascade::addCard(Card card) {
-	if (cascade.size() > 0) {
-		card.setX(x);
-		card.setY(cascade.back().getY() + 30);
-		cascade.push_back(card);
-	}
-	else {
-		card.setX(x);
-		card.setY(y);
-		cascade.push_back(card);
+void Cascade::addCard(std::vector<Card>& cards) {
+	for (int i = 0; i < cards.size(); i++) {
+		if (cascade.size() > 0) {
+			cards[i].setX(x);
+			cards[i].setY(cascade.back().getY() + 30);
+			cascade.push_back(cards[i]);
+		}
+		else {
+			cards[i].setX(x);
+			cards[i].setY(y);
+			cascade.push_back(cards[i]);
+		}
 	}
 }
 
 void Cascade::removeCardAt(sf::Vector2i pos) {
 	for (int i = cascade.size()-1; i >= 0; i--) {
 		if (cascade[i].containsPos(pos)) {
-			cascade.erase(cascade.begin() + i);
+			cascade.erase(cascade.begin() + i, cascade.end());
 			break;
 		}
 	}
 	if (cascade.size() > 0) cascade.back().setOrientation(1);
+}
+
+void Cascade::saveCards(Card card, std::vector<Card>& savedCards) {
+	bool save = false;
+	for (int i = 0; i < cascade.size(); i++) {
+		if (cascade[i] == card) save = true;
+		if (save) savedCards.push_back(cascade[i]);
+	}
 }
 
 std::vector<Card> Cascade::getCascade() {

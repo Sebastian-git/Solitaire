@@ -40,10 +40,23 @@ Card Waste::getCardAt(sf::Vector2i pos) {
 }
 
 void Waste::removeCardAt(sf::Vector2i pos) {
+	std::cout << "Called waste\n";
 	for (int i = 0; i < cards.size(); i++) {
 		if (cards[i].containsPos(pos)) {
 			cards.erase(cards.begin()+i);
+			return;
 		}
+	}
+}
+
+void Waste::saveCards(Card card, std::vector<Card>& savedCards) {
+	bool save = false;
+	for (int i = 0; i < cards.size(); i++) {
+		if (cards[i] == card) save = true;
+		if (save) savedCards.push_back(cards[i]);
+	}
+	for (int i = 0; i < savedCards.size(); i++) {
+		std::cout << "Saved" << savedCards[i] << "\n";
 	}
 }
 

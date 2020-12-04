@@ -32,7 +32,7 @@ private:
 	
 	sf::Texture & deckSpriteSheet;
 
-	Card savedCard;
+	std::vector<Card> savedCards;
 	sf::Vector2i savedPos;
 	int saveCardClass; // 0 = default, 1 = waste, 2 = tableau, 3 = foundation
 	bool cardSelected;

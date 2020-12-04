@@ -14,7 +14,7 @@ public:
 
 	Card getCardAt(sf::Vector2i pos);
 
-	void addCard(Card card);
+	void addCard(std::vector<Card> cards);
 
 	LinkedList getStack();
 

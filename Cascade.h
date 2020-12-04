@@ -13,8 +13,9 @@ public:
 	bool containsPos(sf::Vector2i pos);
 	Card getCardAt(sf::Vector2i pos);
 
-	void addCard(Card card);
+	void addCard(std::vector<Card>& cards);
 	void removeCardAt(sf::Vector2i pos);
+	void saveCards(Card card, std::vector<Card>& savedCards);
 
 	std::vector<Card> getCascade();
 	int getLargestCascade();

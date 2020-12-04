@@ -59,10 +59,10 @@ Card Foundation::getCardAt(sf::Vector2i pos) {
 	return Card();
 }
 
-void Foundation::addCardAt(sf::Vector2i pos, Card& card) {
+void Foundation::addCardAt(sf::Vector2i pos, std::vector<Card>& cards) {
 	for (int i = 0; i < foundationSize; i++) {
 		if (foundation[i].containsPos(pos)) {
-			foundation[i].addCard(card);
+			foundation[i].addCard(cards);
 		}
 	}
 }

@@ -20,8 +20,9 @@ public:
 
 	Card getCardAt(sf::Vector2i pos);
 	void removeCardAt(sf::Vector2i pos);
+	void saveCards(sf::Vector2i pos, Card card, std::vector<Card>& savedCards);
 
-	void addCardAt(sf::Vector2i pos, Card & card);
+	void addCardAt(sf::Vector2i pos, std::vector<Card> & cards);
 
 	void printCascades();	
 	void draw(sf::RenderWindow& window);
