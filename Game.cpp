@@ -18,6 +18,10 @@ void Game::run() {
 	if (!splashTexture.loadFromFile("splash.png")) 
 		std::cout << "Could not load splash screen.\n";
 
+	sf::Texture buttonTexture;
+	if (!buttonTexture.loadFromFile("start.png"))
+		std::cout << "Could not load button image.\n";
+
 	// Handles all game logic
 	Logic logic(deckSpriteSheet); 
 	logic.startGame();
@@ -26,21 +30,34 @@ void Game::run() {
 	sf::RenderWindow window(sf::VideoMode(1500, 900), "Solitaire");
 	sf::Event event;
 
+	// Create button
+	sf::Sprite spriteButton;
+	spriteButton.setTexture(buttonTexture);
+	spriteButton.setScale(0.5, 0.5);
+	spriteButton.setPosition({ (float)((685)), (float)(650)});
+	
 	// Splash screen loop
 	while (window.isOpen()) {
 
 		// Close if user clicks any key or mouse button
 		while (window.pollEvent(event)) {
 			if (event.type == sf::Event::Closed) window.close();
-			else if (event.type == sf::Event::MouseButtonPressed) goto EndSplash;
-			else if (event.type == sf::Event::KeyReleased) goto EndSplash;
 		}
+
+		if (sf::Mouse::isButtonPressed(sf::Mouse::Left) && !mousePress) {
+			mousePress = true;
+			sf::Vector2i pos = sf::Mouse::getPosition(window);
+			if (pos.x > 685 && pos.x < 800 && pos.y > 650 && pos.y < 800) goto EndSplash;
+		}
+		else if (!sf::Mouse::isButtonPressed(sf::Mouse::Left)) mousePress = false;
 
 		// Creates card image
 		sf::Sprite sprite;
 		sprite.setTexture(splashTexture);
 		sprite.scale(sf::Vector2f(2.34, 1.95));
 		window.draw(sprite);
+
+		window.draw(spriteButton);
 
 		// Updates window display
 		window.display();
@@ -66,8 +83,6 @@ void Game::run() {
 			}
 		} else if (!sf::Mouse::isButtonPressed(sf::Mouse::Left)) mousePress = false;
 
-		
-		
 		// Draws cards to screen, calls logic class to handle card logic behind the scenes
 		logic.draw(window);
 
