@@ -3,8 +3,8 @@
 
 Logic::Logic(sf::Texture& deckSpriteSheet) :
 	deckSpriteSheet(deckSpriteSheet),
-	stock(deckSpriteSheet, 10, 700),
-	waste(deckSpriteSheet, 1100, 700),
+	stock(deckSpriteSheet, 100, 700),
+	waste(deckSpriteSheet, 1190, 700),
 	tableau(deckSpriteSheet, 180, 260),
 	foundation(deckSpriteSheet, 260, 60)
 {}
@@ -13,17 +13,9 @@ Logic::Logic(sf::Texture& deckSpriteSheet) :
 void Logic::startGame() {
 
 	stock.fill();
-	stock.printCards();
 	stock.shuffle();
-	stock.printCards();
-
-	waste.drawCards(stock);
-	std::cout << "\nWaste has been drawn.\n";
-	stock.printCards();
 
 	tableau.fillCascades(stock);
-	tableau.printCascades();
-	stock.printCards();
 }
 
 // Draws each category along with their cards to the screen
@@ -117,8 +109,8 @@ bool Logic::validMousePosition(sf::Vector2i pos) {
 
 // Returns true if card placement logic is correct (detect card's suit & rank)
 bool Logic::validCardPlacement(Card card) {
-	if ((card.getSuit() <= 1 && savedCards[0].getSuit() >= 2 ||
-		card.getSuit() >= 2 && savedCards[0].getSuit() <= 1) &&
+	if ((card.getSuit() + savedCards[0].getSuit() != 3 &&
+		card.getSuit() != savedCards[0].getSuit()) &&
 		card.getRank() - 1 == savedCards[0].getRank()) {
 		return true;
 	}

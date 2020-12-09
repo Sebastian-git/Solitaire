@@ -1,6 +1,6 @@
 #include "Card.h"
 
-const float Card::width = 39, Card::height = 52, Card::scale = 2.8;
+const float Card::width = 345, Card::height = 528, Card::scale = 0.29;
 
 Card::Card() {};
 
@@ -39,8 +39,8 @@ void Card::setY(int y) {
 }
 
 bool Card::containsPos(sf::Vector2i pos) {
-	if (pos.x < x + 114 && pos.x > x &&
-		pos.y < y + 152 && pos.y > y) {
+	if (pos.x < x + getWidth() && pos.x > x &&
+		pos.y < y + getHeight() && pos.y > y) {
 		return true;
 	}
 	return false;
@@ -55,12 +55,23 @@ bool Card::getOrientation() {
 }
 
 void Card::draw(sf::RenderWindow & window, sf::Texture & deckSpriteSheet) {
+	// Location on sprite sheet to search for card
 	sf::IntRect loc = sf::IntRect(
-		(int)((rank - 1) * 39.4),
-		((int)suit) * 53,
+		(int)((rank - 1) * 345),
+		((int)suit) * 528,
 		width,
 		height
 	);
+	if (rank == -1) {
+		loc.top = height * 4;
+		loc.left = width * 1;
+	}
+
+	// Cards that are flipped upside down
+	if (!orientation) {
+		loc.left = width * 2;
+		loc.top = height * 4;
+	}
 
 	// Creates card image
 	sf::Sprite sprite;
@@ -69,9 +80,28 @@ void Card::draw(sf::RenderWindow & window, sf::Texture & deckSpriteSheet) {
 	sprite.setTextureRect(loc);
 	sprite.setPosition(sf::Vector2f((float)x, (float)y));
 
-	// Cards that are flipped upside down
-	if (!orientation) sprite.setColor(sf::Color::Red);
-	if (rank == -1) sprite.setColor(sf::Color::Black);
+	window.draw(sprite);
+
+}
+
+void Card::drawBlank(sf::RenderWindow& window, sf::Texture& deckSpriteSheet) {
+	// Location on sprite sheet to search for card
+	sf::IntRect loc = sf::IntRect(
+		(int)((rank - 1) * 345),
+		((int)suit) * 528,
+		width,
+		height
+	);
+	loc.top = height * 4;
+	loc.left = width * 1;
+
+	// Creates card image
+	sf::Sprite sprite;
+	sprite.setTexture(deckSpriteSheet);
+	sprite.scale(sf::Vector2f(scale, scale));
+	sprite.setTextureRect(loc);
+	sprite.setPosition(sf::Vector2f((float)x, (float)y));
+
 	window.draw(sprite);
 
 }

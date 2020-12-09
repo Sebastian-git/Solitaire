@@ -44,7 +44,9 @@ sf::Vector2i Stock::getYBounds() {
 
 void Stock::draw(sf::RenderWindow& window) {
 	if (cards.size() > 0) {
-		cards.back().setOrientation(1);
 		cards.back().draw(window, deckSpriteSheet);
+	}
+	else {
+		Card(-1, (Suit)2, x, y, true).draw(window, deckSpriteSheet);
 	}
 }

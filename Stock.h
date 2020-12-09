@@ -25,5 +25,4 @@ private:
 	std::vector<Card> cards;
 	sf::Texture & deckSpriteSheet;
 	int x, y;
-	int xBounds, yBounds;
 };

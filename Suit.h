@@ -2,7 +2,7 @@
 
 enum class Suit {
 	CLUBS,
-	SPADES,
+	DIAMONDS,
 	HEARTS,
-	DIAMONDS
+	SPADES
 };

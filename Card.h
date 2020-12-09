@@ -27,6 +27,7 @@ public:
 	bool getOrientation();
 
 	void draw(sf::RenderWindow & window, sf::Texture & deckSpriteSheet);
+	void drawBlank(sf::RenderWindow& window, sf::Texture& deckSpriteSheet);
 
 	friend std::ostream& operator <<(std::ostream& out, const Card& card);
 	friend bool operator ==(const Card& card1, const Card& card2);

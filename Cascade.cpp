@@ -28,6 +28,14 @@ Card Cascade::getCardAt(sf::Vector2i pos) {
 	return Card();
 }
 
+std::vector<Card> Cascade::getCascade() {
+	return cascade;
+}
+
+int Cascade::size() {
+	return cascade.size();
+}
+
 void Cascade::addCard(std::vector<Card>& cards) {
 	for (int i = 0; i < cards.size(); i++) {
 		if (cascade.size() > 0) {
@@ -61,16 +69,11 @@ void Cascade::saveCards(Card card, std::vector<Card>& savedCards) {
 	}
 }
 
-std::vector<Card> Cascade::getCascade() {
-	return cascade;
-}
-
 void Cascade::draw(sf::RenderWindow& window) {
 	for (int i = 0; i < cascade.size(); i++) {
 		cascade[i].draw(window, deckSpriteSheet);
 	}
-}
-
-int Cascade::size() {
-	return cascade.size();
+	if (cascade.size() == 0) {
+		Card(-1, (Suit)2, x, y, true).draw(window, deckSpriteSheet);
+	}
 }

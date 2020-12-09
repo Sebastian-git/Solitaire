@@ -13,10 +13,6 @@ bool Stack::containsPos(sf::Vector2i pos) {
 }
 
 bool Stack::validNextCard(Card card, sf::Vector2i pos) {
-	std::cout << "CALLED\n";
-	std::cout << "SAVEDCARD: " << card << "\n";
-	std::cout << stack.top().getSuit() << ":" << card.getSuit()  << "\n";
-	std::cout << stack.top().getSuit() << ":" << card.getSuit() << "\n";
 	if (stack.top().getRank() + 1 == card.getRank() && stack.top().getSuit() == card.getSuit() ) 
 		return true;
 		
