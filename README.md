@@ -13,14 +13,14 @@ As a final project in my CS003A (Fundamentals of Computer Science II) class, stu
 2 - Install SFML [here](https://www.sfml-dev.org/download/sfml/2.5.1/) <br>
 3 - Run the program and enjoy! <br>
 
-(** You do not need the folder "readmeImages", it just contains the preview images for Github **)
+( You do not need the folder "readmeImages", it just contains the preview images for Github )
 
 ##### Previews
 
 The graphical display was created using SFML. In order to play the game, simply select a card by left clicking on it, then place it on a valid card. The game ends when you have all cards on the foundation (top four slots). 
 
 
-<img width="200" height="400" alt="portfolio_view" src="https://github.com/Sebastian-git/Solitaire/blob/master/readmeImages/preview.png"> |
+<img alt="portfolio_view" src="https://github.com/Sebastian-git/Solitaire/blob/master/readmeImages/preview.png"> |
 
 
 ##### Technical Information 
@@ -49,45 +49,54 @@ One of the most important parts of the program is the ```validMousePosition(sf::
 
 ```
 
+2 - If a card is selected, check if you are allowed to place it on this new position
 
-This code takes the minimum and maximum constraints given by the front end, then connect the API inside the config object. The program then creates a two dimensional array. There is one array that contains multiple other arrays with entries of data that is then sent to the front end.
+```cpp
+else if (cardSelected && (inStock(pos) || waste.containsPos(pos) || tableau.containsPos(pos)) || foundation.containsPos(pos)) { 
 
-Another important group of code lies inside ```config/firebase.js```, which contains multiple functions that take advantage of Firebase's [firestore](https://firebase.google.com/docs/firestore) and [authentication](https://firebase.google.com/docs/auth) API's.
-``` js
-doCreateUserWithEmailAndPassword = (email, password) => {
-  return this.auth.createUserWithEmailAndPassword(email, password)
-}
+		// Tableau card placement logic
+		if (tableau.cascadeIsEmpty(pos) || (tableau.containsPos(pos) && validCardPlacement(tableau.getCardAt(pos)) &&
+			tableau.containsTopCard(tableau.getCardAt(pos)))) {
+
+			if (tableau.cascadeIsEmpty(pos) && savedCards[0].getRank() != 13) {
+				unsaveCard();
+				return false;
+			}
+
+			tableau.addCardAt(pos, savedCards);
+
+			if (saveCardClass == 1) waste.removeCardAt(savedPos);
+			else if (saveCardClass == 2) tableau.removeCardAt(savedPos);
+		}
+
+		// Foundation card placement logic
+		if (savedCards.size() == 1 && ((foundation.containsPos(pos)) && foundation.stackIsEmpty(pos) && savedCards[0].getRank() == 1 || (foundation.containsPos(pos) && foundation.validNextCard(savedCards[0], pos)))) {
+
+			foundation.addCardAt(pos, savedCards);
+
+			if (saveCardClass == 1) waste.removeCardAt(savedPos);
+			else if (saveCardClass == 2) tableau.removeCardAt(savedPos);
+		}
+		unsaveCard();
+		return true;
+	}
+
 ```
-These two critical lines of code create a new account using an email and a password through the authentication API.
-``` js
-doSaveFireball = (fireball, email) => {
-  if (email) {
-    return this.db
-    .collection('fireballs').doc(email)
-    .set(
-      {fireball: app.firestore.FieldValue.arrayUnion(fireball)},
-      {merge: true}
-      );
-   }
-}
+
+3 - If you are clicking off screen, unsave card
+``` cpp
+	else {
+		unsaveCard();
+	}
 ```
-This function takes a fireball and email as parameters, checks if the email exists and then saves the entries to view in the favorites page.
-
-### <a name="members"></a> Meet the Team
-
-**Titles** | **Sebastian Cevallos** | **Petula Pascall** | **Brandan Herron** |
-|-|-|-|-|
-|**Role**| Project Manager/Back-end Developer | Front-end Developer | Back-end Developer |
-|**Contact**| [Github](https://github.com/Sebastian-git), [LinkedIn](https://www.linkedin.com/in/sebastian-cevallos-2917bb16a/) | [Github](https://github.com/SeePetulaCode), [LinkedIn](https://www.linkedin.com/in/petulapascall/) | [Github](https://github.com/brandan1989), [LinkedIn](https://www.linkedin.com/in/brandan-herron/) |
 
 
 ### Launch
-HTML 5, CSS 3, Javascript 3 <br>
-Node.js 12.18.3, Nodemon 2.0.4, Express 4.17.1, Express-Session 1.17.1, Axios 0.19.2, Body-Parser 1.19.0 <br>
-Firebase 7.18.0, VS Code 1.48, Heroku <br>
+C++ (GCC 9.2.0) <br>
+Visual Studio <br>
 
 ### Status: 
 
-Complete 
+In progress 
 
 #### [back to the top](#title)
