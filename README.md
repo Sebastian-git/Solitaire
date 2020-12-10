@@ -20,7 +20,7 @@ As a final project in my CS003A (Fundamentals of Computer Science II) class, stu
 The graphical display was created using SFML. In order to play the game, simply select a card by left clicking on it, then place it on a valid card. The game ends when you have all cards on the foundation (top four slots). 
 
 
-<img alt="portfolio_view" src="https://github.com/Sebastian-git/Solitaire/blob/master/readmeImages/preview.png"> |
+<img alt="portfolio_view" src="https://github.com/Sebastian-git/Solitaire/blob/master/readmeImages/preview.png">
 
 
 ##### Technical Information 
